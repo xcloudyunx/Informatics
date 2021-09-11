@@ -2,29 +2,20 @@
 
 using namespace std;
 
-int main() {	
-	int N;
-	unsigned long long K;
+int main() {
+	int N, K;
 	cin >> N >> K;
 	
-	vector<unsigned long long> val;
+	vector<int> scores(N);
 	
-	vector<unsigned long long> sum(N+1);
-	sum.at(0) = 0;
+	int score = 0;
 	
 	for (int i=0; i<N; i++) {
-		int a;
-		cin >> a;
-		sum.at(i+1) = sum.at(i)+a;
-		
-		for (int j=0; j<=i; j++) {
-			val.push_back(sum.at(i+1) - sum.at(j));
-		}
+		cin >> scores.at(i);
+		score += scores.at(i);
 	}
 	
-	sort(val.rbegin(), val.rend());
-	
-	cout << val[K-1] << endl;
+	priority_queue<int> 
 	
 	return 0;
 }

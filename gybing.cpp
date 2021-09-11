@@ -1,45 +1,70 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
+
+vector<int> totals;
+vector<pair<int, int>> maxValues;
+
+void dfs(vector<vector<int>> grid, int i, int j, int W, int L, int score, int prev) {
+	if (j == L) {
+		totals.push_back(score+grid.at(j).at(i));
+		return;
+	}
+	
+	if (prev == -1) {
+		if (maxValues.at((W+1)*j + i - prev).first < score) {
+			maxValues.at((W+1)*j + i - prev).first = score;
+		} else {
+			return;
+		}
+	} else if (prev == -1) {
+		if (maxValues.at((W+1)*j + i - prev).second < score) {
+			maxValues.at((W+1)*j + i - prev).second = score;
+		} else {
+			return;
+		}
+	}
+	
+	if (i != 0) {
+		if (prev == 1) {
+			dfs(grid, i-1, j+1, W, L, score - grid.at(j).at(i)*grid.at(j).at(i), -1);
+		} else {
+			dfs(grid, i-1, j+1, W, L, score+grid.at(j).at(i), -1);
+		}
+		
+	}
+	if (i != W) {
+		if (prev == -1) {
+			dfs(grid, i+1, j+1, W, L, score - grid.at(j).at(i)*grid.at(j).at(i), 1);
+		} else {
+			dfs(grid, i+1, j+1, W, L, score+grid.at(j).at(i), 1);
+		}
+	}
+}
 
 int main() {
 	int W, L;
 	cin >> W;
 	cin >> L;
 	
-	vector< vector<int> > grid(2, vector<int> (W));
-	vector< vector< pair<int, int> > > table(2, vector< pair<int, int> > (W, {INT_MIN, INT_MIN})); //first from left, second from right
+	vector<vector<int>> grid(L);
+	maxValues.resize(W*L, {0, 0});
 	
 	for (int j=0; j<L; j++) {
 		for (int i=0; i<W; i++) {
-			cin >> grid.at(j%2).at(i);
-			
-			if (j == 0) {
-				table.at(0).at(i) = {0, 0};
-			} else {
-				if (i != W-1) {
-					int prev = grid.at((j-1)%2).at(i+1);
-					table.at(j%2).at(i).second = max(table.at((j+1)%2).at(i+1).first-prev*prev, table.at((j+1)%2).at(i+1).second+prev);
-				}
-				if (i != 0) {
-					int prev = grid.at((j-1)%2).at(i-1);
-					table.at(j%2).at(i).first = max(table.at((j+1)%2).at(i-1).second-prev*prev, table.at((j+1)%2).at(i-1).first+prev);
-				}
-			}
-		}
-		if (j == 1) {
-			for (int i=0; i<W; i++) {
-				table.at((j+1)%2).at(i) = {INT_MIN, INT_MIN};
-			}
+			int x;
+			cin >> x;
+			grid.at(j).push_back(x);
 		}
 	}
 	
-	int cmax = INT_MIN;
 	for (int i=0; i<W; i++) {
-		cmax = max(cmax, max(table.at((L-1)%2).at(i).first, table.at((L-1)%2).at(i).second)+grid.at((L-1)%2).at(i));
+		dfs(grid, i, 0, W-1, L-1, 0, 0);
 	}
 	
-	cout << cmax << endl;
+	cout << *max_element(totals.begin(), totals.end());
 	
 	return 0;
 }

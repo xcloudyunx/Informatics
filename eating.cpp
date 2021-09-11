@@ -2,74 +2,32 @@
 
 using namespace std;
 
+int knapSack() {
+	if (n == 0) {
+		return 0;
+	} else if (table.at(n).at(size) != -1) {
+		return table.at(n).at(size);
+	} else if (n != cowNumbers.size() && cowNumbers.at(n-1) > cowNumbers.at(n) {
+		
+	} else {
+		int valueWith = 1 + knapSack();
+		int valueWithout = knapSack();
+		return table.at(n).at(size) = min(tableWith, tableWithout);
+	}
+}
+
 int main() {
 	int N;
 	cin >> N;
 	
-	vector<int> cows(N);
+	vector<int> cowNumbers(N);
+	vector< vector<int> > table(N+1, vector<int>(N+1, -1));
 	
-	for (int i=0; i<N; i++) cin >> cows.at(i);
-	
-	vector< vector<int> > table(2, vector<int>(4));
-	table.at(0) = {INT_MAX, 0, 0, 0};
-	table.at(1).at(0) = INT_MAX;
-	
-	for (int i=1; i<=N; i++) {
-		int c = i%2;
-		int p = (i-1)%2;
-		if (cows.at(i-1) == 1) {
-			table.at(c).at(1) = table.at(p).at(1);
-			table.at(c).at(2) = min(table.at(p).at(1), table.at(p).at(2))+1;
-			table.at(c).at(3) = *min_element(table.at(p).begin(), table.at(p).end())+1;
-		} else if (cows.at(i-1) == 2) {
-			table.at(c).at(1) = table.at(p).at(1)+1;
-			table.at(c).at(2) = min(table.at(p).at(1), table.at(p).at(2));
-			table.at(c).at(3) = *min_element(table.at(p).begin(), table.at(p).end())+1;
-		} else {
-			table.at(c).at(1) = table.at(p).at(1)+1;
-			table.at(c).at(2) = min(table.at(p).at(1), table.at(p).at(2))+1;
-			table.at(c).at(3) = *min_element(table.at(p).begin(), table.at(p).end());
-		}
-		
-		/*for (int j=1; j<4; j++) {
-			cout << table.at(c).at(j) << " ";
-		}
-		cout << endl;*/
+	for (int i=0; i<N; i++) {
+		cin >> cowNumbers.at(i);
 	}
 	
-	//cout << endl;
-	
-	int first = *min_element(table.at(N%2).begin(), table.at(N%2).end());
-	
-	reverse(cows.begin(), cows.end());
-	table.at(0) = {INT_MAX, 0, 0, 0};
-	
-	for (int i=1; i<=N; i++) {
-		int c = i%2;
-		int p = (i-1)%2;
-		if (cows.at(i-1) == 1) {
-			table.at(c).at(1) = table.at(p).at(1);
-			table.at(c).at(2) = min(table.at(p).at(1), table.at(p).at(2))+1;
-			table.at(c).at(3) = *min_element(table.at(p).begin(), table.at(p).end())+1;
-		} else if (cows.at(i-1) == 2) {
-			table.at(c).at(1) = table.at(p).at(1)+1;
-			table.at(c).at(2) = min(table.at(p).at(1), table.at(p).at(2));
-			table.at(c).at(3) = *min_element(table.at(p).begin(), table.at(p).end())+1;
-		} else {
-			table.at(c).at(1) = table.at(p).at(1)+1;
-			table.at(c).at(2) = min(table.at(p).at(1), table.at(p).at(2))+1;
-			table.at(c).at(3) = *min_element(table.at(p).begin(), table.at(p).end());
-		}
-		
-		/*for (int j=1; j<4; j++) {
-			cout << table.at(c).at(j) << " ";
-		}
-		cout << endl;*/
-	}
-	
-	int second = *min_element(table.at(N%2).begin(), table.at(N%2).end());
-	
-	cout << min(first, second) << endl;
+	cout << knapSack() << endl;
 	
 	return 0;
 }
