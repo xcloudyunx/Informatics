@@ -1,0 +1,50 @@
+//WARNING:
+//THE FOLLOWING CODE WAS WRITTEN IN A COMPETITION
+//IT SHOULD NOT BE USED AS A REFERENCE
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  unsigned long long int n, k, w, h, minimum, chungus;
+  unsigned long long int cur_width = 0;
+  vector<pair<int, int>> buildings;
+  cin>>n>>k;
+  for(int i=0; i<n; i++){
+    cin>>w>>h;
+    buildings.push_back(make_pair(h, w));
+  }
+  sort(buildings.begin(), buildings.end());
+
+  priority_queue<int> pq;
+  for(int i=0; i<k-1; i++){
+    pq.push(buildings[i].second);
+    cur_width += buildings[i].second;
+  }
+  minimum = (cur_width + buildings[k-1].second) * buildings[k-1].first;
+  //cout<<minimum<<endl;
+  if(k>1){
+    for(int i=k; i<n; i++){
+      if(buildings[i-1].second < pq.top()){
+        chungus = pq.top();
+        pq.pop();
+        pq.push(buildings[i-1].second);
+        cur_width = cur_width - chungus + buildings[i-1].second;
+      }
+      if((cur_width + buildings[i].second) * buildings[i].first < minimum){
+        minimum = (cur_width + buildings[i].second) * buildings[i].first;
+      }
+      //cout<<(cur_width + buildings[i].second) * buildings[i].first<<endl;
+    }
+  }else{
+    for(int i=k; i<n; i++){
+      if(buildings[i].first*buildings[i].second < minimum){
+        minimum = buildings[i].first*buildings[i].second;
+      }
+    }
+  }
+  cout<<minimum<<endl;
+}
